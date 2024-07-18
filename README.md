@@ -2,8 +2,17 @@
 
 ## Tool Usage
 ```
-python3 tool.py <Full PDF Name Here>
+python3 tool.py <Full_PDF_Name_Here>
 ```
+### Commands run in setup
+```
+python3 -m venv ./env
+source env/bin/activate
+pip install pytesseract
+pip install pdf2image
+pip install openai
+```
+~~pip install PyPDF2~~
 
 ## Road Map
 1. Python script that takes a PDF document as an argument
@@ -20,3 +29,13 @@ python3 tool.py <Full PDF Name Here>
 ## Limitations
 * This tool can only handle one PDF at a time in its current state, but could handle multiple with some minor tweaks
 * The questions asked to the third party API are hardcoded, which lacks flexibility for future queries without manual changes
+* Non-character information in the PDF will not get translated to text well
+
+
+## Future Options
+Could use Unstructured package: https://unstructured.io/blog/how-to-process-pdf-in-python
+
+Could directly process PDFs with some of these products and their APIs:
+* https://pdf.ai/
+* https://www.chatpdf.com/
+* https://www.veryfi.com/
