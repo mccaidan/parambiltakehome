@@ -1,5 +1,10 @@
 # Parambil Take Home
 
+## Tool Usage
+```
+python3 tool.py <Full PDF Name Here>
+```
+
 ## Road Map
 1. Python script that takes a PDF document as an argument
 2. Use PDF processing library to convert PDF to text
@@ -10,6 +15,7 @@
 ## Assumptions
 * The information in the PDF is about one person
 * Security of the third party LLM API is not a concern
+* The input of the PDF can be a command line argument, as it's cleaner than using the input() function
 
 ## Limitations
 * This tool can only handle one PDF at a time in its current state, but could handle multiple with some minor tweaks
