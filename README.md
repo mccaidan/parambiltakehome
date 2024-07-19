@@ -11,6 +11,8 @@ source env/bin/activate
 pip install pytesseract
 pip install pdf2image
 pip install openai
+brew install poppler
+brew install tesseract
 ```
 ~~pip install PyPDF2~~
 
@@ -25,6 +27,8 @@ pip install openai
 * The information in the PDF is about one person
 * Security of the third party LLM API is not a concern
 * The input of the PDF can be a command line argument, as it's cleaner than using the input() function
+* Tool won't be run on Windows OS
+* PDF is in same directiory as script
 
 ## Limitations
 * This tool can only handle one PDF at a time in its current state, but could handle multiple with some minor tweaks
