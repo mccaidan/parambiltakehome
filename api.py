@@ -15,150 +15,95 @@ def comp(PROMPT=''):
     print(respDict)
     
 
-prompt = """which medications are listed here, with just their start date and end date, using None for unknown: Tab08/20/2020Medication Instructions Qty Status Started Stopped IndicationDoctor
-ﬂuticasone nasal 0.05 mg/inh spray1 Spray Spray, NASAL, Daily, Qty: 16 gm,
-Reﬁlls: 6, USE 1 SPRAY TO EACH NOSTRIL
-DAILY, Maintenance, Route to Pharmacy
-Electronically, CVS/pharmacy #953916 g 08/18/2020
-zolpidem 10 mg oral tablet1 Tab Tab, PO, qHS, 30 Day, Qty: 30 Tab,
-Reﬁlls: 4, TAKE 1 TABLET BY MOUTH AT
-BEDTIME AS NEEDED FOR SLEEP, 01/03/21
-13:59:00 PST, Acute, Route to Pharmacy
-Electronically, CVS/pharmacy #9539, MDD
-(major depressive disorder), recurrent, in full
-remission30
-Tab08/06/2020 01:59
-PM01/03/2021
-01:59 PM
-QUEtiapine 50 mg oral tablet1 Tab Tab, PO, qHS, Qty: 30 Tab, Reﬁlls: 4,
-TAKE 1 TABLET BY MOUTH EVERY DAY AT
-BEDTIME FOR MOOD AND INSOMNIA,
-Maintenance, Route to Pharmacy
-Electronically, CVS/pharmacy #9539, MDD
-(major depressive disorder), recurrent, in full
-remission30
-Tab08/06/2020 01:59
-PM01/03/2021
-01:59 PM
-buPROPion 100 mg/12 hours (SR) oral
-tablet, extended release1 Tab Tab, ER, PO, BID, Qty: 60 Tab, Reﬁlls: 3,
-1 tab qam for 3 days then 1 tab BID
-discontinue celexa and Ritalin, Maintenance,
-Route to Pharmacy Electronically,
-CVS/pharmacy #9539, MDD (major depressive
-disorder), recurrent episode, mild60
-Tab08/06/2020 01:59
-PM12/04/2020
-01:59 PM
-loratadine 10 mg oral tablet1 Tab, PO, Daily, Qty: 90 Tab, Reﬁlls: 3,
-Maintenance, Route to Pharmacy
-Electronically, CVS/pharmacy #953990
-Tab07/09/2020
-atorvastatin 10 mg oral tablet1 Tab Tab, PO, Daily, Qty: 90 Tab, Reﬁlls: 3,
-TAKE 1 TABLET BY MOUTH EVERY DAY,
-Maintenance, Route to Pharmacy
-Electronically, CVS/pharmacy #953990
-Tab07/09/2020
-loratadine 10 mg oral tablet1 Tab, PO, Daily, Qty: 30 Tab, Reﬁlls: 6,
-Maintenance, 30, Route to Pharmacy
-Electronically, CVS STORE 0953930
-Tab06/11/2020
-citalopram 20 mg oral tablet2 Tab Tab, PO, qHS, Qty: 60 Tab, 4,
-Maintenance, Route to Pharmacy
-Electronically, CVS/pharmacy #9539, MDD
-(major depressive disorder), recurrent, in full
-remission60
-Tab05/06/2020 03:03
-PM10/03/2020
-03:03 PMMedication Instructions Qty Status Started Stopped IndicationDoctor
-methylphenidate 10 mg oral tablet1 Tab Tab, PO, qAM, Qty: 30 Tab, 0, 1/2 to 1
-tab qam PRN focus, Maintenance, Route to
-Pharmacy Electronically, CVS/pharmacy
-#9539, ADHD30
-Tab05/06/2020 03:03
-PM06/05/2020
-03:03 PM
-QUEtiapine 50 mg oral tablet1 Tab Tab, PO, qHS, Qty: 30 Tab, 4, TAKE 1
-TABLET BY MOUTH EVERY DAY AT BEDTIME
-FOR MOOD AND INSOMNIA, Maintenance,
-Route to Pharmacy Electronically,
-CVS/pharmacy #9539, MDD (major depressive
-disorder), recurrent, in full remission30
-Tab05/06/2020 03:03
-PM10/03/2020
-03:03 PM
-zolpidem 10 mg oral tablet1 Tab Tab, PO, qHS, 30 Day, Qty: 30 Tab, 4,
-TAKE 1 TABLET BY MOUTH AT BEDTIME AS
-NEEDED FOR SLEEP, 10/03/20 15:03:00 PDT,
-Acute, Route to Pharmacy Electronically,
-CVS/pharmacy #9539, MDD (major depressive
-disorder), recurrent, in full remission30
-Tab05/06/2020 03:03
-PM10/03/2020
-03:03 PM
-citalopram 20 mg oral tablet2 Tab Tab, PO, qHS, Qty: 60 Tab, 4, 1.5 tabs
-qhs for 1 week then 2 tabs qhs, Maintenance,
-Route to Pharmacy Electronically,
-CVS/pharmacy #9539, MDD (major depressive
-disorder), recurrent, in full remission60
-Tab04/01/2020 11:57
-AM08/29/2020
-11:57 AM
-citalopram 20 mg oral tablet2 Tab Tab, PO, qHS, Qty: 60 Tab, 4, 1.5 tabs
-qhs for 1 week then 2 tabs qhs, Maintenance,
-Route to Pharmacy Electronically,
-CVS/pharmacy #9539, MDD (major depressive
-disorder), recurrent, in full remission60
-Tab03/10/2020 02:30
-PM08/07/2020
-02:30 PM
-zolpidem 10 mg oral tablet1 Tab Tab, PO, qHS, 30 Day, Qty: 30 Tab, 4,
-TAKE 1 TABLET BY MOUTH AT BEDTIME AS
-NEEDED FOR SLEEP, 08/07/20 14:30:00 PDT,
-Acute, Route to Pharmacy Electronically,
-CVS/pharmacy #9539, MDD (major depressive
-disorder), recurrent, in full remission30
-Tab03/10/2020 02:30
-PM08/07/2020
-02:30 PM
-methylphenidate 10 mg oral tablet1 Tab Tab, PO, qAM, Qty: 30 Tab, 0, 1/2 to 1
-tab qam PRN focus, Maintenance, Route to
-Pharmacy Electronically, CVS/pharmacy
-#9539, ADHD30
-Tab03/10/2020 02:30
-PM04/09/2020
-02:30 PMMedication Instructions Qty Status Started Stopped IndicationDoctor
-QUEtiapine 50 mg oral tablet1 Tab Tab, PO, qHS, Qty: 30 Tab, 4, TAKE 1
-TABLET BY MOUTH EVERY DAY AT BEDTIME
-FOR MOOD AND INSOMNIA, Maintenance,
-Route to Pharmacy Electronically,
-CVS/pharmacy #9539, MDD (major depressive
-disorder), recurrent, in full remission30
-Tab03/10/2020 02:30
-PM08/07/2020
-02:30 PM
-tiZANidine 4 mg oral tablet1 Tab, PO, Daily, 30 Tab, 2, Soft Stop, Route to
-Pharmacy Electronically, CVS/pharmacy #953930
-Tab02/14/2020
-ﬂuticasone nasal 0.05 mg/inh spray1 Spray, NASAL, Daily, 16 mL, 5, Soft Stop,
-Route to Pharmacy Electronically,
-CVS/pharmacy #953916
-mL02/03/2020
-methylphenidate 10 mg oral tablet1 Tab Tab, PO, qAM, Qty: 30 Tab, 0, 1/2 to 1
-tab qam PRN focus, Maintenance, Route to
-Pharmacy Electronically, CVS/pharmacy
-#9539, ADHD30
-Tab12/31/2019 10:22
-AM01/30/2020
-10:22 AM
-zolpidem 10 mg oral tablet1 Tab Tab, PO, qHS, 30 Day, Qty: 30 Tab, 4,
-TAKE 1 TABLET BY MOUTH AT BEDTIME AS
-NEEDED FOR SLEEP, 05/29/20 10:22:40 PDT,
-Acute, Route to Pharmacy Electronically,
-CVS/pharmacy #9539, MDD (major depressive
-disorder), recurrent, in full remission30
-Tab12/31/2019 10:22
-AM05/29/2020
-10:22 AM"""
+prompt = """which allergies are listed here: Page 2 of 2
+
+-end002421772
+
+Stanford Hospital and Clinics
+300 Pasteur Drive
+Stanford, CA 94305
+
+NAME: Chase, Jeanine NEW PATIENT VISIT
+
+NUMBER: 177-57-97 ACCOUNT NUMBER: 060017757972
+ATTENDING: Michael Fredericson, M.D.
+
+DATE: 06/17/2004
+
+****%* ALLERGIES*****THE PATIENT IS ALLERGIC TO PENICILLIN, THIS CAUSES
+SWELLING OF HER AIRWAY AND SHE CANNOT DIGEST WHEAT OR SOY.
+
+IDENTIFICATION: The patient is a 31-year-old female with complaints of right groin pain.
+
+HISTORY OF PRESENT ILLNESS: Ms. Chase comes to clinic today complaining of right groin
+pain and tightness. The patient states that she injured her gluteus medius during a yoga position
+where she tried to put her right foot behind her head. She feels she also strained her back a little at
+the same time. She was evaluated by Dr. Saal on February 15, 2004. He diagnosed her as having
+chronic gluteus medius tendinitis as suggested by calcifications adjacent to the greater trochanter on
+x-ray. He also did a lumbar spine x-ray, which revealed normal findings. The patient was referred
+to a Pilates class for core strengthening and flexibility exercises and she was also referred to the
+Sports Medicine Institute for deep tissue massage. She has been going to SMI working with Rob
+Finney over the last two years. The patient also notes that she switched for a short time to the
+Sports Massage Center and was treated with a Stem machine but felt like her injury was getting
+worse so she returned to the Sports Medicine Institute. Today she states her pain level is 0/10. She
+states that she would like to return to cycling but notes that activities such as cycling cause a
+rubbing sensation in the nght groin area as well as she feels the need for popping her hip frequently.
+The patient notes worsening of her symptoms with cycling, prolonged electrical use, and any hip
+adductor or hip abductor muscle exercises.
+
+PAST MEDICAL HISTORY: As noted above.
+PAST SURGICAL HISTORY: None.
+MEDICATIONS: None.
+
+FAMILY HISTORY: The patient’s father is 73 and has stomach problems. Her mother is 63 and
+has a bad knee. She has one sibling who is 30 and has stress problems. She had another sibling
+who was 30 and had drug and Vicodin problems, who is deceased secondary to suicide. The
+patient’s grandparents both have diabetes and are ages 98 and 85.
+
+SOCIAL HISTORY: The patient denies tobacco use or illicit drug use. She states that she drinks
+
+alcohol once a month. She eats a balanced diet and her weight is stable. She was born in California
+and currently works as a hair stylist. She lives alone.
+
+nim
+
+Page 1 of 3Original for Scanning
+
+002421772
+
+Stanford Hospital and Clinics
+300 Pasteur Drive
+Stanford, CA 94305
+
+NAME: Chase, Jeanine NEW PATIENT VISIT
+
+NUMBER: 177-57-97 ACCOUNT NUMBER: 060017757972
+ATTENDING: Michael Fredericson, M.D.
+
+DATE: 06/17/2004
+
+REVIEW OF SYSTEMS: The patient is in good general health lately. She notes some recent
+weight changes secondary to dietary changes. She otherwise denies other constitutional symptoms.
+She denies eyes, ears, nose, mouth, or throat disorders. She denies respiratory, cardiovascular, or
+gastrointestinal problems. She denies neurologic, psychiatric, endocrine, hematologic, or lymphatic
+disorders. The patient notes some burning with urination but denies any other genitourinary
+disorders. The patient notes some changing moles but no other integumentary disorders. She states
+she has joint stiffness, pain and cramping, weakness of muscles and joints, and some back pain.
+The patient also notes allergic reaction to medications and that she has had her tetanus booster
+within the last ten years. Her other immunizations are up to date.
+
+PHYSICAL EXAMINATION: On physical examination the patient is a pleasant woman in no
+acute distress. She has genu varus alignment of her lower extremities and pes planus bilaterally
+with the too many toes sign bilaterally. She has no pain with single leg squat and no pain with
+single leg hop. She is non-tender with resisted hip flexion, hip adduction, or hip abduction. She has
+a negative fabere test. She has tenderness of the right paraspinal muscles at the level of L5. She has
+pain with internal rotation, hip flexion, and adduction of the right groin. She has a positive Sculler
+test. The patient is slightly guarded at the right hip with internal rotation. She has good range of
+motion of both hips bilaterally. She has a little snapping in the groin with internal rotation and hip
+flexion. The patient is non-tender at the SI joint and sacrurn. The patient has excessive pronation
+with ambulation. She has weakness of the hip flexors and hip abductors and a negative Thomas
+test. She is non-tender at the greater trochanter on the right. She has a negative femoral cutaneous
+stretch test. She has no pain with lumbar forward flexion or hyperextension. She has some
+tightness with side bending to the right with rotation."""
 
 comp(prompt)
