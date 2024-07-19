@@ -13,9 +13,9 @@ PROMPT_SURGERIES = 'Using only this text, which surgeries are listed here, with 
 PROMPT_MEDICATIONS = 'Using only this text, which medications are listed here, with just their start date and end date, using None for unknown. If no medications return empty JSON. Use key of medications to a list of medication key and startDate key and endDate key: '
 PROMPT_ALLERGIES = 'Using only this text, which allergies are listed here. If no allergies return empty JSON. Use key of allergies to a list of only allergyName key: '
 
-surgeriesList = []
-medicationsList = []
-allergiesList = []
+surgeriesDict = {}
+medicationsDict = {}
+allergiesDict = {}
 
 # RETURNS the dictionary of the API response to the prompt
 def getDictionaryResponseFromAPI(prompt):
@@ -31,6 +31,18 @@ def getDictionaryResponseFromAPI(prompt):
     return respDict
 
 
+def addToSurgeriesDict(surgeryNameLower, surgeryDate, pageNum):
+    if surgeryNameLower in surgeriesDict:
+        surgeriesDict[surgeryNameLower]['datesList'].append(surgeryDate)
+        surgeriesDict[surgeryNameLower]['pagesList'].append(pageNum)
+    else:
+        surgeriesDict[surgeryNameLower] = {
+            'datesList': [surgeryDate],
+            'pagesList': [pageNum]
+        }
+    print('Added to surgeries: ', (surgeryNameLower, surgeryDate, pageNum))
+
+
 def processSurgeriesDict(sDict, pageNum, text):
     if 'surgeries' in sDict:
         if isinstance(sDict['surgeries'], list):
@@ -38,11 +50,20 @@ def processSurgeriesDict(sDict, pageNum, text):
                 if isinstance(s, dict):
                     if 'surgery' in s and 'date' in s:
                         #print('potential surgery: ', s['surgery'])
-                        #print((s['surgery'], s['date'], pageNum))
-                        if s['surgery'].lower() in text.lower(): # Will be strings
-                            tup = (s['surgery'], s['date'], pageNum)
-                            surgeriesList.append(tup)
-                            #print('appended to surgeries: ', tup)
+                        if s['surgery'].lower() in text.lower():
+                            addToSurgeriesDict(s['surgery'].lower(), s['date'], pageNum)
+
+
+def addToMedicationsDict(medicationNameLower, startDate, endDate, pageNum):
+    if medicationNameLower in medicationsDict:
+        medicationsDict[medicationNameLower]['datesList'].append((startDate, endDate))
+        medicationsDict[medicationNameLower]['pagesList'].append(pageNum)
+    else:
+        medicationsDict[medicationNameLower] = {
+            'datesList': [(startDate, endDate)],
+            'pagesList': [pageNum]
+        }
+    print('Added to medications: ', (medicationNameLower, startDate, endDate, pageNum))
 
 
 def processMedicationsDict(mDict, pageNum, text):
@@ -52,11 +73,18 @@ def processMedicationsDict(mDict, pageNum, text):
                 if isinstance(m, dict):
                     if 'medication' in m and 'startDate' in m and 'endDate' in m:
                         #print('potential medication: ', m['medication'])
-                        #print((m['medication'], m['startDate'], m['endDate'], pageNum))
-                        if m['medication'].lower() in text.lower(): # Will be strings
-                            tup = (m['medication'], m['startDate'], m['endDate'], pageNum)
-                            medicationsList.append(tup)
-                            #print('appended to medications: ', tup)
+                        if m['medication'].lower() in text.lower():
+                            addToMedicationsDict(m['medication'].lower(), m['startDate'], m['endDate'], pageNum)
+
+
+def addToAllergiesDict(allergyNameLower, pageNum):
+    if allergyNameLower in allergiesDict:
+        allergiesDict[allergyNameLower]['pagesList'].append(pageNum)
+    else:
+        allergiesDict[allergyNameLower] = {
+            'pagesList': [pageNum]
+        }
+    print('Added to allergies: ', (allergyNameLower, pageNum))
 
 
 def processAllergiesDict(aDict, pageNum, text):
@@ -66,30 +94,26 @@ def processAllergiesDict(aDict, pageNum, text):
                 if isinstance(a, dict):
                     if 'allergyName' in a:
                         #print('potential allergy: ', a['allergyName'])
-                        #print((a['allergyName'], pageNum))
-                        if a['allergyName'].lower() in text.lower(): # Will be strings
-                            tup = (a['allergyName'], pageNum)
-                            allergiesList.append(tup)
-                            #print('appended to allergies: ', tup)
+                        if a['allergyName'].lower() in text.lower():
+                            addToAllergiesDict(a['allergyName'].lower(), pageNum)
 
 
-def printLists():
+def printDicts():
     print()
-    print(surgeriesList)
+    print(json.dumps(surgeriesDict, indent=4))
     print('------------------------------------------------------------')
-    print(medicationsList)
+    print(json.dumps(medicationsDict, indent=4))
     print('------------------------------------------------------------')
-    print(allergiesList)
+    print(json.dumps(allergiesDict, indent=4))
     print('------------------------------------------------------------')
 
-def writeLists():
-    with open('program_lists.txt', "a") as output_file:
-        # Open the file in append mode
-        output_file.write(str(surgeriesList))
+def writeDicts():
+    with open('program_dicts.txt', "a") as output_file:
+        output_file.write(json.dumps(surgeriesDict, indent=4))
         output_file.write('------------------------------------------------------------')
-        output_file.write(str(medicationsList))
+        output_file.write(json.dumps(medicationsDict, indent=4))
         output_file.write('------------------------------------------------------------')
-        output_file.write(str(allergiesList))
+        output_file.write(json.dumps(allergiesDict, indent=4))
 
 def writeToWordDoc():
     # TODO WRITE OUTPUT FILE HERE
@@ -97,7 +121,7 @@ def writeToWordDoc():
 
 def main(pdfName):
     outdir = Path(__file__).parent.resolve()
-    text_file = outdir / Path("out_text.txt")
+    #text_file = outdir / Path("out_text.txt")
     pdfLocation = str(outdir) + '/' + pdfName
     
     image_file_list = []
@@ -131,22 +155,15 @@ def main(pdfName):
                 pageNumber += 1
                 
                 # if (pageNumber == 32):
-                #     printLists()
+                #     printDicts()
+                #     writeDicts()
                 #     print('DONE')
                 #     quit()
-                
-                # val = input("Press y to print lists, n otherwise [y/n]: ")
-                # if val == 'y':
-                #     printLists()
-        printLists()
-        writeLists()
+
+        printDicts()
+        writeDicts()
         
         writeToWordDoc()
 
 if __name__ == "__main__":
     main(sys.argv[1])
-    
-    
-#with open(text_file, "a") as output_file:
-#    # Open the file in append mode
-#    output_file.write(text)
