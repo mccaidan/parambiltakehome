@@ -1,4 +1,0 @@
-{'allergies': [{'allergyName': 'PENICILLIN'}, {'allergyName': 'WHEAT'}, {'allergyName': 'SOY'}]}
-
-WARNING: Can look like:
-{'allergies': ['PENICILLIN', 'WHEAT', 'SOY']}
