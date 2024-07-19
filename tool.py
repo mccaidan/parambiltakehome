@@ -9,7 +9,7 @@ from PIL import Image
 #openai.api_key = '<API_KEY>'
 
 outdir = Path(__file__).parent.resolve() # Directory of script
-text_file = outdir / Path("out_text2.txt")
+text_file = outdir / Path("out_text.txt")
 
 # Store all the pages of the PDF in a variable
 image_file_list = []
