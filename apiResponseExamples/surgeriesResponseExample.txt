@@ -1,1 +1,1 @@
-{'surgeries': [{'surgery_name': 'MAXILLARY-MANDIBULAR JAW ADVANCEMENT SURGERY', 'date': '2012'}, {'surgery_name': 'Hip Surgery', 'date': 'None'}, {'surgery_name': 'Hysterectomy', 'date': 'None'}]}
+{'surgeries': [{'surgery': 'Maxillary-Mandibular Jaw Advancement Surgery', 'date': '2012'}, {'surgery': 'Hysterectomy', 'date': '3/11/2018'}, {'surgery': 'Hip Surgery', 'date': 'None'}]}
