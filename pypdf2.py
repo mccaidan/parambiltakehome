@@ -1,8 +1,14 @@
 import PyPDF2
+from pathlib import Path
+
+outdir = Path(__file__).parent.resolve()
+text_file = outdir / Path("out_text2.txt")
+
 read_pdf = PyPDF2.PdfReader('SampleHealthRecord_Redacted.pdf')
-for page in read_pdf.pages: print(page.extract_text())
 
-# Prompt: which medications are listed here, with their start date and end date:
+with open(text_file, "a") as output_file:
+    for page in read_pdf.pages:
+        output_file.write(page.extract_text())
+        print(page.extract_text())
 
-
-# Not bad at converting to text, aim for better
+# Not bad at converting to text, but only saw 1 "SURGERY", so probably not the best choice for this
