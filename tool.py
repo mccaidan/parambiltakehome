@@ -31,46 +31,65 @@ def getDictionaryResponseFromAPI(prompt):
     return respDict
 
 
-def processSurgeriesDict(sDict, pageNum):
+def processSurgeriesDict(sDict, pageNum, text):
     if 'surgeries' in sDict:
         if isinstance(sDict['surgeries'], list):
             for s in sDict['surgeries']:
                 if isinstance(s, dict):
                     if 'surgery' in s and 'date' in s:
-                        tup = (s['surgery'], s['date'], pageNum)
-                        surgeriesList.append(tup)
-                        print('appended to surgeries: ', tup)
+                        #print('potential surgery: ', s['surgery'])
+                        #print((s['surgery'], s['date'], pageNum))
+                        if s['surgery'].lower() in text.lower(): # Will be strings
+                            tup = (s['surgery'], s['date'], pageNum)
+                            surgeriesList.append(tup)
+                            #print('appended to surgeries: ', tup)
 
 
-def processMedicationsDict(mDict, pageNum):
+def processMedicationsDict(mDict, pageNum, text):
     if 'medications' in mDict:
         if isinstance(mDict['medications'], list):
             for m in mDict['medications']:
                 if isinstance(m, dict):
                     if 'medication' in m and 'startDate' in m and 'endDate' in m:
-                        tup = (m['medication'], m['startDate'], m['endDate'], pageNum)
-                        medicationsList.append(tup)
-                        print('appended to medications: ', tup)
+                        #print('potential medication: ', m['medication'])
+                        #print((m['medication'], m['startDate'], m['endDate'], pageNum))
+                        if m['medication'].lower() in text.lower(): # Will be strings
+                            tup = (m['medication'], m['startDate'], m['endDate'], pageNum)
+                            medicationsList.append(tup)
+                            #print('appended to medications: ', tup)
 
 
-def processAllergiesDict(aDict, pageNum):
+def processAllergiesDict(aDict, pageNum, text):
     if 'allergies' in aDict:
         if isinstance(aDict['allergies'], list):
             for a in aDict['allergies']:
                 if isinstance(a, dict):
                     if 'allergyName' in a:
-                        tup = (a['allergyName'], pageNum)
-                        allergiesList.append(tup)
-                        print('appended to allergies: ', tup)
+                        #print('potential allergy: ', a['allergyName'])
+                        #print((a['allergyName'], pageNum))
+                        if a['allergyName'].lower() in text.lower(): # Will be strings
+                            tup = (a['allergyName'], pageNum)
+                            allergiesList.append(tup)
+                            #print('appended to allergies: ', tup)
 
 
 def printLists():
+    print()
     print(surgeriesList)
     print('------------------------------------------------------------')
     print(medicationsList)
     print('------------------------------------------------------------')
     print(allergiesList)
     print('------------------------------------------------------------')
+
+def writeLists():
+    with open('program_lists.txt', "a") as output_file:
+        # Open the file in append mode
+        output_file.write(str(surgeriesList))
+        output_file.write('------------------------------------------------------------')
+        output_file.write(str(medicationsList))
+        output_file.write('------------------------------------------------------------')
+        output_file.write(str(allergiesList))
 
 def writeToWordDoc():
     # TODO WRITE OUTPUT FILE HERE
@@ -98,21 +117,29 @@ def main(pdfName):
                 
                 # Surgeries Section
                 prompt = f"""{PROMPT_SURGERIES} {text}"""
-                processSurgeriesDict(getDictionaryResponseFromAPI(prompt), pageNumber)
+                processSurgeriesDict(getDictionaryResponseFromAPI(prompt), pageNumber, text)
                 
                 # Medications Section
                 prompt = f"""{PROMPT_MEDICATIONS} {text}"""
-                processMedicationsDict(getDictionaryResponseFromAPI(prompt), pageNumber)
+                processMedicationsDict(getDictionaryResponseFromAPI(prompt), pageNumber, text)
                 
                 # Allergies Section
                 prompt = f"""{PROMPT_ALLERGIES} {text}"""
-                processAllergiesDict(getDictionaryResponseFromAPI(prompt), pageNumber)
+                processAllergiesDict(getDictionaryResponseFromAPI(prompt), pageNumber, text)
                 
+                print(pageNumber)
                 pageNumber += 1
                 
-                val = input("Press y to print lists, n otherwise [y/n]: ")
-                if val == 'y':
-                    printLists()
+                # if (pageNumber == 32):
+                #     printLists()
+                #     print('DONE')
+                #     quit()
+                
+                # val = input("Press y to print lists, n otherwise [y/n]: ")
+                # if val == 'y':
+                #     printLists()
+        printLists()
+        writeLists()
         
         writeToWordDoc()
 
