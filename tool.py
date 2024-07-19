@@ -13,9 +13,9 @@ PROMPT_SURGERIES = 'Using only this text, which surgeries are listed here, with 
 PROMPT_MEDICATIONS = 'Using only this text, which medications are listed here, with just their start date and end date, using None for unknown. If no medications return empty JSON. Use key of medications to a list of medication key and startDate key and endDate key: '
 PROMPT_ALLERGIES = 'Using only this text, which allergies are listed here. If no allergies return empty JSON. Use key of allergies to a list of only allergyName key: '
 
-surgeriesDict = {}
-medicationsDict = {}
-allergiesDict = {}
+surgeriesList = []
+medicationsList = []
+allergiesList = []
 
 # RETURNS the dictionary of the API response to the prompt
 def getDictionaryResponseFromAPI(prompt):
@@ -32,25 +32,49 @@ def getDictionaryResponseFromAPI(prompt):
 
 
 def processSurgeriesDict(sDict, pageNum):
-    print()
-    print(sDict)
-    print(pageNum)
-    print()
-        
+    if 'surgeries' in sDict:
+        if isinstance(sDict['surgeries'], list):
+            for s in sDict['surgeries']:
+                if isinstance(s, dict):
+                    if 'surgery' in s and 'date' in s:
+                        tup = (s['surgery'], s['date'], pageNum)
+                        surgeriesList.append(tup)
+                        print('appended to surgeries: ', tup)
+
 
 def processMedicationsDict(mDict, pageNum):
-    print()
-    print(mDict)
-    print(pageNum)
-    print()
-    
+    if 'medications' in mDict:
+        if isinstance(mDict['medications'], list):
+            for m in mDict['medications']:
+                if isinstance(m, dict):
+                    if 'medication' in m and 'startDate' in m and 'endDate' in m:
+                        tup = (m['medication'], m['startDate'], m['endDate'], pageNum)
+                        medicationsList.append(tup)
+                        print('appended to medications: ', tup)
+
 
 def processAllergiesDict(aDict, pageNum):
-    print()
-    print(aDict)
-    print(pageNum)
-    print()
+    if 'allergies' in aDict:
+        if isinstance(aDict['allergies'], list):
+            for a in aDict['allergies']:
+                if isinstance(a, dict):
+                    if 'allergyName' in a:
+                        tup = (a['allergyName'], pageNum)
+                        allergiesList.append(tup)
+                        print('appended to allergies: ', tup)
 
+
+def printLists():
+    print(surgeriesList)
+    print('------------------------------------------------------------')
+    print(medicationsList)
+    print('------------------------------------------------------------')
+    print(allergiesList)
+    print('------------------------------------------------------------')
+
+def writeToWordDoc():
+    # TODO WRITE OUTPUT FILE HERE
+    pass
 
 def main(pdfName):
     outdir = Path(__file__).parent.resolve()
@@ -85,9 +109,12 @@ def main(pdfName):
                 processAllergiesDict(getDictionaryResponseFromAPI(prompt), pageNumber)
                 
                 pageNumber += 1
-                wait = input("Press Enter to continue.")
+                
+                val = input("Press y to print lists, n otherwise [y/n]: ")
+                if val == 'y':
+                    printLists()
         
-        # TODO WRITE OUTPUT FILE HERE
+        writeToWordDoc()
 
 if __name__ == "__main__":
     main(sys.argv[1])
