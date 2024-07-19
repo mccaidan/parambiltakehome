@@ -11,6 +11,7 @@ source env/bin/activate
 pip install pytesseract
 pip install pdf2image
 pip install openai
+pip install python-docx
 brew install poppler
 brew install tesseract
 ```
