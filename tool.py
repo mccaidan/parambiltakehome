@@ -32,15 +32,20 @@ def getDictionaryResponseFromAPI(prompt):
 
 
 def addToSurgeriesDict(surgeryNameLower, surgeryDate, pageNum):
+    sDate = surgeryDate
+    if (sDate is None):
+        sDate = 'None'
+
     if surgeryNameLower in surgeriesDict:
-        surgeriesDict[surgeryNameLower]['datesList'].append(surgeryDate)
+        if sDate != 'None':
+            surgeriesDict[surgeryNameLower]['datesList'].append(sDate)
         surgeriesDict[surgeryNameLower]['pagesList'].append(pageNum)
     else:
         surgeriesDict[surgeryNameLower] = {
-            'datesList': [surgeryDate],
+            'datesList': [sDate],
             'pagesList': [pageNum]
         }
-    print('Added to surgeries: ', (surgeryNameLower, surgeryDate, pageNum))
+    print('Added to surgeries: ', (surgeryNameLower, sDate, pageNum))
 
 
 def processSurgeriesDict(sDict, pageNum, text):
@@ -55,15 +60,24 @@ def processSurgeriesDict(sDict, pageNum, text):
 
 
 def addToMedicationsDict(medicationNameLower, startDate, endDate, pageNum):
+    sDate = startDate
+    if (sDate is None):
+        sDate = 'None'
+    
+    eDate = endDate
+    if (eDate is None):
+        eDate = 'None'
+    
     if medicationNameLower in medicationsDict:
-        medicationsDict[medicationNameLower]['datesList'].append((startDate, endDate))
+        if sDate != 'None' or eDate != 'None':
+            medicationsDict[medicationNameLower]['datesList'].append((sDate, eDate))
         medicationsDict[medicationNameLower]['pagesList'].append(pageNum)
     else:
         medicationsDict[medicationNameLower] = {
-            'datesList': [(startDate, endDate)],
+            'datesList': [(sDate, eDate)],
             'pagesList': [pageNum]
         }
-    print('Added to medications: ', (medicationNameLower, startDate, endDate, pageNum))
+    print('Added to medications: ', (medicationNameLower, sDate, eDate, pageNum))
 
 
 def processMedicationsDict(mDict, pageNum, text):
@@ -154,14 +168,14 @@ def main(pdfName):
                 print(pageNumber)
                 pageNumber += 1
                 
-                # if (pageNumber == 32):
-                #     printDicts()
-                #     writeDicts()
-                #     print('DONE')
-                #     quit()
+                if (pageNumber == 32):
+                    printDicts()
+                    #writeDicts()
+                    print('DONE')
+                    quit()
 
         printDicts()
-        writeDicts()
+        #writeDicts()
         
         writeToWordDoc()
 
