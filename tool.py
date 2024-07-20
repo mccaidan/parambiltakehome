@@ -5,6 +5,7 @@ import pytesseract
 from pdf2image import convert_from_path
 from PIL import Image
 import json
+from docx import Document
 from openai import OpenAI
 
 client = OpenAI(api_key='')
@@ -45,7 +46,6 @@ def addToSurgeriesDict(surgeryNameLower, surgeryDate, pageNum):
             'datesList': [sDate],
             'pagesList': [pageNum]
         }
-    print('Added to surgeries: ', (surgeryNameLower, sDate, pageNum))
 
 
 def processSurgeriesDict(sDict, pageNum, text):
@@ -54,7 +54,6 @@ def processSurgeriesDict(sDict, pageNum, text):
             for s in sDict['surgeries']:
                 if isinstance(s, dict):
                     if 'surgery' in s and 'date' in s:
-                        #print('potential surgery: ', s['surgery'])
                         if s['surgery'].lower() in text.lower():
                             addToSurgeriesDict(s['surgery'].lower(), s['date'], pageNum)
 
@@ -77,7 +76,6 @@ def addToMedicationsDict(medicationNameLower, startDate, endDate, pageNum):
             'datesList': [(sDate, eDate)],
             'pagesList': [pageNum]
         }
-    print('Added to medications: ', (medicationNameLower, sDate, eDate, pageNum))
 
 
 def processMedicationsDict(mDict, pageNum, text):
@@ -86,7 +84,6 @@ def processMedicationsDict(mDict, pageNum, text):
             for m in mDict['medications']:
                 if isinstance(m, dict):
                     if 'medication' in m and 'startDate' in m and 'endDate' in m:
-                        #print('potential medication: ', m['medication'])
                         if m['medication'].lower() in text.lower():
                             addToMedicationsDict(m['medication'].lower(), m['startDate'], m['endDate'], pageNum)
 
@@ -98,7 +95,6 @@ def addToAllergiesDict(allergyNameLower, pageNum):
         allergiesDict[allergyNameLower] = {
             'pagesList': [pageNum]
         }
-    print('Added to allergies: ', (allergyNameLower, pageNum))
 
 
 def processAllergiesDict(aDict, pageNum, text):
@@ -107,7 +103,6 @@ def processAllergiesDict(aDict, pageNum, text):
             for a in aDict['allergies']:
                 if isinstance(a, dict):
                     if 'allergyName' in a:
-                        #print('potential allergy: ', a['allergyName'])
                         if a['allergyName'].lower() in text.lower():
                             addToAllergiesDict(a['allergyName'].lower(), pageNum)
 
@@ -121,6 +116,7 @@ def printDicts():
     print(json.dumps(allergiesDict, indent=4))
     print('------------------------------------------------------------')
 
+
 def writeDicts():
     with open('program_dicts.txt', "a") as output_file:
         output_file.write(json.dumps(surgeriesDict, indent=4))
@@ -129,13 +125,58 @@ def writeDicts():
         output_file.write('------------------------------------------------------------')
         output_file.write(json.dumps(allergiesDict, indent=4))
 
+
 def writeToWordDoc():
-    # TODO WRITE OUTPUT FILE HERE
-    pass
+    document = Document()
+
+    document.add_heading('PDF Parser Results', 0)
+
+    document.add_heading('What surgeries has this patient had?', level=1)
+    for key in surgeriesDict:
+        document.add_paragraph(
+            key, style='List Bullet'
+        )
+        dates = ', '.join(str(x) for x in surgeriesDict[key]['datesList'])
+        document.add_paragraph(
+            'Date:    ' + dates, style='List Bullet 2'
+        )
+        pages = ', '.join(str(x) for x in surgeriesDict[key]['pagesList'])
+        document.add_paragraph(
+            'Source pages:    ' + pages, style='List Bullet 2'
+        )
+
+    document.add_heading('What medications has this patient used?', level=1)
+    for key in medicationsDict:
+        document.add_paragraph(
+            key, style='List Bullet'
+        )
+        document.add_paragraph(
+            'Start and end dates:    ', style='List Bullet 2'
+        )
+        for tup in medicationsDict[key]['datesList']:
+            document.add_paragraph(
+                str(tup[0]) + ',  ' + str(tup[1]), style='List Bullet 3'
+            )
+        pages = ', '.join(str(x) for x in medicationsDict[key]['pagesList'])
+        document.add_paragraph(
+            'Source pages:    ' + pages, style='List Bullet 2'
+        )
+
+    document.add_heading('What allergies does the patient have?', level=1)
+    for key in allergiesDict:
+        document.add_paragraph(
+            key, style='List Bullet'
+        )
+        pages = ', '.join(str(x) for x in allergiesDict[key]['pagesList'])
+        document.add_paragraph(
+            'Source pages:    ' + pages, style='List Bullet 2'
+        )
+
+    document.save('PdfParserResults.docx')
+
 
 def main(pdfName):
     outdir = Path(__file__).parent.resolve()
-    #text_file = outdir / Path("out_text.txt")
     pdfLocation = str(outdir) + '/' + pdfName
     
     image_file_list = []
@@ -165,17 +206,7 @@ def main(pdfName):
                 prompt = f"""{PROMPT_ALLERGIES} {text}"""
                 processAllergiesDict(getDictionaryResponseFromAPI(prompt), pageNumber, text)
                 
-                print(pageNumber)
                 pageNumber += 1
-                
-                if (pageNumber == 32):
-                    printDicts()
-                    #writeDicts()
-                    print('DONE')
-                    quit()
-
-        printDicts()
-        #writeDicts()
         
         writeToWordDoc()
 

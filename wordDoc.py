@@ -1391,7 +1391,7 @@ for key in medicationDict:
     )
     for tup in medicationDict[key]['datesList']:
         document.add_paragraph(
-            tup[0] + ',  ' + tup[1], style='List Bullet 3'
+            str(tup[0]) + ',  ' + str(tup[1]), style='List Bullet 3'
         )
     pages = ', '.join(str(x) for x in medicationDict[key]['pagesList'])
     document.add_paragraph(
